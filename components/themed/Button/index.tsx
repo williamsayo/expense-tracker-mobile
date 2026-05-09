@@ -80,7 +80,11 @@ export function ThemedButton({
     const textColor = getThemeColor(
         colorScheme ? `${colorScheme}Text` : "text",
     );
-    const backgroundColor = getThemeColor(getBackgroundScheme(colorScheme));
+    const backgroundColor = getThemeColor(
+        getBackgroundScheme(
+            variant === "solid" ? (colorScheme ?? "primary") : colorScheme,
+        ),
+    );
     const borderColor = getThemeColor(getBorderScheme(colorScheme));
 
     const isDisabled = interactiveState === "disabled" || isLoading;
@@ -180,7 +184,7 @@ export function ThemedButton({
                 size === "icon"
                     ? 0
                     : Spacing[COMPONENT_SPACING.buttonPadding.x],
-            ...(fullWidth && { minWidth: undefined, width: "100%" }),
+            ...(fullWidth && { flex: 1 }),
             ...(isIconButton && {
                 width: COMPONENT_SIZES.button.icon.minWidth,
             }),
@@ -190,20 +194,20 @@ export function ThemedButton({
 
     const getButtonTextStyle = useCallback(
         (pressed: boolean) => {
-            const finalStyle: TextStyle = {
+            const buttonTextStyle: TextStyle = {
                 color: colors.textColor,
             };
             if (typeof children === "string" && variant === "link") {
-                finalStyle.textDecorationLine = "underline";
-                finalStyle.textDecorationStyle = "solid";
-                finalStyle.textDecorationColor = colors.textColor;
+                buttonTextStyle.textDecorationLine = "underline";
+                buttonTextStyle.textDecorationStyle = "solid";
+                buttonTextStyle.textDecorationColor = colors.textColor;
             }
 
             if (pressed && colors.pressed?.textColor) {
-                finalStyle.color = colors.pressed.textColor;
+                buttonTextStyle.color = colors.pressed.textColor;
             }
 
-            return finalStyle;
+            return buttonTextStyle;
         },
         [colors.pressed, colors.textColor, variant],
     );
@@ -235,7 +239,12 @@ export function ThemedButton({
         >
             {({ pressed }) => {
                 return (
-                    <ThemedView flexDirection="row" alignItems="center" gap={2}>
+                    <ThemedView
+                        bgColor="transparent"
+                        flexDirection="row"
+                        alignItems="center"
+                        gap={2}
+                    >
                         {isLoading ? (
                             <ActivityIndicator
                                 color={colors.textColor}
