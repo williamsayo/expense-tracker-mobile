@@ -1,4 +1,3 @@
-import { BACKEND_BASE_URL } from "@/constants";
 import {
     asyncDeleteItem,
     asyncGetItem,
