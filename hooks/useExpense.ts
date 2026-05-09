@@ -5,7 +5,6 @@ import {
     getExpenses,
     updateExpense,
 } from "@/lib/network/expensio";
-import { Expense } from "@/lib/network/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useExpenses = () =>

@@ -1,6 +1,12 @@
 import { SubmitBudgetFormData } from "@/components/forms/budget/budget-resolver";
 import { api } from "./apiClient";
-import { Budget, BudgetOverview, Expense, ExpenseOverview } from "./types";
+import {
+    Budget,
+    BudgetOverview,
+    Expense,
+    ExpenseOverview,
+    Profile,
+} from "./types";
 import { SubmitExpenseFormData } from "@/components/forms/expense/expense-resolver";
 import { AxiosError } from "axios";
 
@@ -155,13 +161,25 @@ export async function getExpenseOverview(): Promise<ExpenseOverview> {
 
 // Profile API
 
-export async function getProfile() {
+export async function getProfile(): Promise<Profile> {
     try {
-        const res = await api.get(`/auth/profile`);
+        const res = await api.get("/auth/profile");
         return res.data;
     } catch (error) {
         if (error instanceof AxiosError) {
             console.error("Error fetching profile:", error.response?.data);
+        }
+        throw error; // Rethrow the error after logging it
+    }
+}
+
+export async function updateProfile(data: Profile): Promise<Profile> {
+    try {
+        const res = await api.put("/auth/profile", data);
+        return res.data;
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.error("Error updating profile:", error.response?.data);
         }
         throw error; // Rethrow the error after logging it
     }

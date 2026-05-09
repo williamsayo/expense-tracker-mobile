@@ -6,7 +6,6 @@ import {
     getBudgetById,
     updateBudget,
 } from "@/lib/network/expensio";
-import { Budget, Expense } from "@/lib/network/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useBudget = (id: string) =>
