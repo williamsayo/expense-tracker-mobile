@@ -8,12 +8,13 @@ import {
 } from "@/components/themed/Text";
 import { ThemedView } from "@/components/themed/View";
 import { Icon } from "@/components/ui/Icon";
-import { elevations, mixins } from "@/lib/tokens";
+import { elevations, mixins, typography } from "@/lib/tokens";
 import { Spacing } from "@/lib/spacing/spacing";
 import { Link } from "expo-router";
 import { useMemo, useState } from "react";
 import {
     ActivityIndicator,
+    FlatList,
     ScrollView,
     useWindowDimensions,
 } from "react-native";
@@ -53,6 +54,7 @@ export function Dashboard() {
     const activeBudget = budgetsOverview?.activeBudget;
     const recentExpenses = expensesOverview?.recentExpenses || [];
     const recentBudgets = budgetsOverview?.recentBudgets || [];
+    const topCategories = expensesOverview?.recentExpenses || [];
 
     return (
         <>
@@ -93,9 +95,9 @@ export function Dashboard() {
                             justifyContent="space-between"
                         >
                             <SubheaderText
-                                size="sm"
                                 transform="uppercase"
                                 color="subtle"
+                                {...typography.headings.h4}
                             >
                                 total spending
                             </SubheaderText>
@@ -153,17 +155,17 @@ export function Dashboard() {
                             borderColor="default"
                             bgColor="subtle"
                         >
-                            <ThemedView>
-                                <ThemedView {...mixins.between}>
-                                    <SubheaderText
-                                        transform="capitalize"
-                                        color="subtle"
-                                    >
+                            <ThemedView bgColor="transparent" gap={1}>
+                                <ThemedView
+                                    {...mixins.between}
+                                    bgColor="transparent"
+                                >
+                                    <SubheaderText {...typography.headings.h4}>
                                         Active Budget
                                     </SubheaderText>
                                     <Icon name="wallet-outline" size={20} />
                                 </ThemedView>
-                                <BodyText transform="capitalize" size="sm">
+                                <BodyText transform="capitalize" color="subtle">
                                     {activeBudget?.name}
                                 </BodyText>
                             </ThemedView>
@@ -171,6 +173,7 @@ export function Dashboard() {
                                 flexDirection="row"
                                 alignItems="baseline"
                                 gap={1}
+                                bgColor="transparent"
                             >
                                 <LabelText size="2xl" color="primary">
                                     {formatMoney(
@@ -223,64 +226,54 @@ export function Dashboard() {
                 )}
             </ThemedView>
 
-            <ThemedView gap={2}>
-                <ThemedView {...mixins.row}>
-                    <SubheaderText transform="capitalize">
-                        Top Categories
-                    </SubheaderText>
-                </ThemedView>
-                <ThemedView
-                    borderWidth={1}
-                    rounded="xl"
-                    shadow="raised"
-                    borderColor="subtle"
-                >
-                    {recentExpenses.slice(0, 3).map((item, index) => (
-                        <ThemedView
-                            pi={6}
-                            pb={4}
-                            gap={3}
-                            borderBottomWidth={
-                                recentExpenses.length - 1 === index ? 0 : 1
-                            }
-                            rounded="xl"
-                            borderColor="muted"
-                            key={item.id}
-                        >
-                            <ThemedView
-                                flex={1}
-                                {...mixins.between}
-                                gap={2}
-                                alignItems="center"
-                            >
-                                <ThemedView {...mixins.row} gap={2}>
-                                    <ThemedView
-                                        bgColor="inverted"
-                                        rounded="md"
-                                        p={2}
-                                    >
-                                        <Icon
-                                            name={categoryIcons[item.category]}
-                                            size={16}
-                                            color="invertedText"
-                                        />
-                                    </ThemedView>
+            {topCategories && (
+                <ThemedView gap={2}>
+                    <ThemedView {...mixins.row}>
+                        <SubheaderText transform="capitalize">
+                            Top Categories
+                        </SubheaderText>
+                    </ThemedView>
+                    <ThemedView pb={4}>
+                        <FlatList
+                            data={topCategories}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item) => item.id}
+                            contentContainerStyle={{ gap: Spacing[6] }}
+                            renderItem={({ item }) => (
+                                <ThemedView
+                                    gap={1}
+                                    alignItems="center"
+                                    bgColor="subtle"
+                                    rounded="md"
+                                    pb={4}
+                                    pi={8}
+                                    key={item.id}
+                                >
+                                    <Icon
+                                        name={categoryIcons[item.category]}
+                                        size={20}
+                                        color="invertedBackground"
+                                    />
                                     <BodyText
                                         size="base"
                                         transform="capitalize"
                                     >
                                         {item.category}
                                     </BodyText>
+
+                                    <BodyText size="base" weight="bold">
+                                        {formatMoney(
+                                            item.amount,
+                                            item.currency,
+                                        )}
+                                    </BodyText>
                                 </ThemedView>
-                                <BodyText size="sm">
-                                    {formatMoney(item.amount, item.currency)}
-                                </BodyText>
-                            </ThemedView>
-                            <ProgressBar current={10} total={20} />
-                        </ThemedView>
-                    ))}
+                            )}
+                        />
+                    </ThemedView>
                 </ThemedView>
-            </ThemedView>
+            )}
 
             <ThemedView gap={2}>
                 <ThemedView flexDirection="row" justifyContent="space-between">
