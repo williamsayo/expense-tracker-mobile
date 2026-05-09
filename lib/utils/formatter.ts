@@ -40,10 +40,13 @@ export function formatPercentage(
     }).format(numberValue);
 }
 
-export function formatDate(date: Date | string) {
+export function formatDate(
+    date: Date | string,
+    style?: "short" | "medium" | "long" | "full",
+) {
     const dateObj = parseDate(date);
     return Intl.DateTimeFormat(undefined, {
-        dateStyle: "short",
+        dateStyle: style ?? "short",
     }).format(dateObj);
 }
 
@@ -51,7 +54,6 @@ export function formatNumber(
     value: number,
     { showDecimals = false }: FormatterOptions = {},
 ) {
-    
     const numberValue = parseNumber(value);
     return Intl.NumberFormat(undefined, {
         maximumFractionDigits:
