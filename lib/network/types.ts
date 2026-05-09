@@ -5,6 +5,8 @@ export interface Expense {
     category: Category;
     currency: Currency;
     date: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface Budget {
@@ -18,6 +20,9 @@ export interface Budget {
     endDate: string;
     currency: Currency;
     allocations: BudgetAllocation[];
+    expenses: Expense[];
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface BudgetAllocation {
@@ -27,6 +32,8 @@ export interface BudgetAllocation {
     amountSpent: number;
     usedPercentage: number;
     remainingPercentage: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface BudgetOverview {
@@ -40,6 +47,16 @@ export interface ExpenseOverview {
     recentExpenses: Expense[];
     highestExpense: Expense;
     totalSpent: number;
+}
+
+export interface Profile {
+    email: string;
+    username: string;
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export const Currency = ["USD", "EUR", "GBP", "NGN", "GHS"] as const;
