@@ -15,6 +15,7 @@ interface Theme {
     // background
     background: string;
     primaryBackground: string;
+    primaryMutedBackground: string;
     invertedBackground: string;
     subtleBackground: string;
     mutedBackground: string;
@@ -62,6 +63,7 @@ export const appTheme: ThemeDefinition = {
             // background
             background: Colors["purple-blue"][900],
             primaryBackground: Colors.blue[500],
+            primaryMutedBackground: Colors.blue[400],
             invertedBackground: Colors.white[100],
             subtleBackground: Colors["purple-blue"][700],
             mutedBackground: Colors.grey[400],
@@ -86,7 +88,6 @@ export const appTheme: ThemeDefinition = {
             lightText: Colors.grey[900],
             // text on color but in the format of {color}Text
             whiteText: Colors.white[100],
-            
         },
         light: {
             overlay: Colors.black[100],
@@ -102,6 +103,7 @@ export const appTheme: ThemeDefinition = {
             // background
             background: Colors.white[100],
             primaryBackground: Colors.blue[500],
+            primaryMutedBackground: Colors.blue[400],
             invertedBackground: Colors["purple-blue"][900],
             subtleBackground: Colors.grey[50],
             mutedBackground: Colors.grey[100],

@@ -34,11 +34,6 @@ export function useTheme() {
             borderOverride?: { light?: string; dark?: string };
             borderColor?: ThemedViewBorderColor;
         }) => {
-            const hasBackgroundColor =
-                bgColor || bgOverride?.light || bgOverride?.dark;
-            const hasBorderColor =
-                borderColor || borderOverride?.light || borderOverride?.dark;
-
             const backgroundColor = useMemo(() => {
                 if (bgColor === "transparent") {
                     return "transparent";
@@ -72,10 +67,8 @@ export function useTheme() {
             }, [borderColor, borderOverride, colorScheme]);
 
             return {
-                backgroundColor: hasBackgroundColor
-                    ? backgroundColor
-                    : undefined,
-                borderColor: hasBorderColor ? _borderColor : undefined,
+                backgroundColor: backgroundColor,
+                borderColor: _borderColor,
             };
         },
         [colorScheme],
