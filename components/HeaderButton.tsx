@@ -6,6 +6,7 @@ export default function HeaderButton({
     variant = "text",
     href,
     onPress,
+    accessibilityRole,
     ...props
 }: ThemedButton & { href?: Route }) {
     const router = useRouter();
@@ -16,7 +17,7 @@ export default function HeaderButton({
 
     return (
         <ThemedButton
-            accessibilityRole="link"
+            accessibilityRole={!href || !onPress ? accessibilityRole : "link"}
             variant={variant}
             {...props}
             onPress={href ? () => router.push(href) : onPress || router.back}
