@@ -14,6 +14,7 @@ const ThemedViewBackgroundColor = [
     "muted",
     "transparent",
     "primary",
+    "primaryMuted",
 ] as const;
 
 export type ThemedViewBackgroundColor =

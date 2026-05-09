@@ -31,7 +31,7 @@ export const getBackgroundScheme = (scheme?: ButtonColorScheme): ThemeKey => {
         case "warning":
             return "warningText";
         default:
-            return "primary";
+            return "background";
     }
 };
 
