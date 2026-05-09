@@ -8,7 +8,7 @@ import {
 } from "@/components/themed/Text";
 import { ThemedView } from "@/components/themed/View";
 import { Icon } from "@/components/ui/Icon";
-import { mixins } from "@/lib/tokens";
+import { elevations, mixins } from "@/lib/tokens";
 import { Spacing } from "@/lib/spacing/spacing";
 import { Link } from "expo-router";
 import { useMemo, useState } from "react";
@@ -19,6 +19,8 @@ import {
 } from "react-native";
 import { formatDate, formatMoney } from "@/lib/utils/formatter";
 import { useBudgetOverview, useExpenseOverview } from "@/hooks/useOverview";
+import { ProgressBar } from "@/components/themed/ProgressBar";
+import { categoryIcons } from "@/components/forms/budget/types";
 
 export function Dashboard() {
     const { width } = useWindowDimensions();
@@ -40,13 +42,13 @@ export function Dashboard() {
         return width - horizontalPadding;
     }, [width]);
 
-    // if (isBudgetsLoading || isExpensesLoading) {
-    //     return (
-    //         <ThemedView flex={1} justifyContent="center" alignItems="center">
-    //             <ActivityIndicator size="large" color="primary" />
-    //         </ThemedView>
-    //     );
-    // }
+    if (isBudgetsLoading || isExpensesLoading) {
+        return (
+            <ThemedView flex={1} justifyContent="center" alignItems="center">
+                <ActivityIndicator size="large" color="primary" />
+            </ThemedView>
+        );
+    }
 
     const activeBudget = budgetsOverview?.activeBudget;
     const recentExpenses = expensesOverview?.recentExpenses || [];
@@ -106,16 +108,32 @@ export function Dashboard() {
                             )}
                         </LabelText>
 
-                        <ThemedView
-                            {...mixins.row}
-                            justifyContent="center"
-                            gap={4}
-                        >
+                        <ThemedView justifyContent="center" gap={3}>
                             <Link href="/(create)/create-expense" asChild>
-                                <ThemedButton>Add Expense</ThemedButton>
+                                <ThemedButton
+                                    leftIcon={
+                                        <Icon
+                                            name="add-sharp"
+                                            color="invertedText"
+                                            size={20}
+                                        />
+                                    }
+                                    style={{
+                                        ...elevations.raised,
+                                    }}
+                                    colorScheme="primary"
+                                >
+                                    Add Expense
+                                </ThemedButton>
                             </Link>
                             <Link href="/(create)/create-budget" asChild>
                                 <ThemedButton
+                                    leftIcon={
+                                        <Icon
+                                            name="wallet-outline"
+                                            color="text"
+                                        />
+                                    }
                                     variant="outline"
                                     colorScheme="subtle"
                                 >
@@ -206,6 +224,65 @@ export function Dashboard() {
             </ThemedView>
 
             <ThemedView gap={2}>
+                <ThemedView {...mixins.row}>
+                    <SubheaderText transform="capitalize">
+                        Top Categories
+                    </SubheaderText>
+                </ThemedView>
+                <ThemedView
+                    borderWidth={1}
+                    rounded="xl"
+                    shadow="raised"
+                    borderColor="subtle"
+                >
+                    {recentExpenses.slice(0, 3).map((item, index) => (
+                        <ThemedView
+                            pi={6}
+                            pb={4}
+                            gap={3}
+                            borderBottomWidth={
+                                recentExpenses.length - 1 === index ? 0 : 1
+                            }
+                            rounded="xl"
+                            borderColor="muted"
+                            key={item.id}
+                        >
+                            <ThemedView
+                                flex={1}
+                                {...mixins.between}
+                                gap={2}
+                                alignItems="center"
+                            >
+                                <ThemedView {...mixins.row} gap={2}>
+                                    <ThemedView
+                                        bgColor="inverted"
+                                        rounded="md"
+                                        p={2}
+                                    >
+                                        <Icon
+                                            name={categoryIcons[item.category]}
+                                            size={16}
+                                            color="invertedText"
+                                        />
+                                    </ThemedView>
+                                    <BodyText
+                                        size="base"
+                                        transform="capitalize"
+                                    >
+                                        {item.category}
+                                    </BodyText>
+                                </ThemedView>
+                                <BodyText size="sm">
+                                    {formatMoney(item.amount, item.currency)}
+                                </BodyText>
+                            </ThemedView>
+                            <ProgressBar current={10} total={20} />
+                        </ThemedView>
+                    ))}
+                </ThemedView>
+            </ThemedView>
+
+            <ThemedView gap={2}>
                 <ThemedView flexDirection="row" justifyContent="space-between">
                     <SubheaderText transform="capitalize">
                         Recent Expenses
@@ -233,7 +310,7 @@ export function Dashboard() {
                     borderWidth={1}
                     rounded="xl"
                     shadow="raised"
-                    borderColor="muted"
+                    borderColor="subtle"
                 >
                     {recentExpenses.map((item, index) => (
                         <ThemedView
@@ -244,10 +321,11 @@ export function Dashboard() {
                             borderBottomWidth={
                                 recentExpenses.length - 1 === index ? 0 : 1
                             }
+                            rounded="xl"
                             borderColor="muted"
                             key={item.id}
                         >
-                            <ThemedView bgColor="inverted" rounded="full" p={2}>
+                            <ThemedView bgColor="inverted" rounded="md" p={2}>
                                 <Icon
                                     name="receipt-outline"
                                     size={20}
@@ -265,18 +343,22 @@ export function Dashboard() {
                                         {formatDate(item.date)} •
                                     </CaptionText>
                                     <ThemedView
-                                        bgColor="subtle"
+                                        bgColor="primaryMuted"
                                         rounded="full"
                                         pi={2.5}
                                         pb={0.5}
                                     >
-                                        <CaptionText color="primary" size="xs">
+                                        <CaptionText
+                                            transform="capitalize"
+                                            size="xs"
+                                            weight="light"
+                                        >
                                             {item.category}
                                         </CaptionText>
                                     </ThemedView>
                                 </ThemedView>
                             </ThemedView>
-                            <BodyText color="critical">
+                            <BodyText color="critical" size="sm">
                                 -{formatMoney(item.amount, item.currency)}
                             </BodyText>
                         </ThemedView>
@@ -292,7 +374,7 @@ export function Dashboard() {
             <ThemedView gap={2}>
                 <ThemedView flexDirection="row" justifyContent="space-between">
                     <SubheaderText transform="capitalize">
-                        Budgets Status
+                        recent budgets
                     </SubheaderText>
                     <Link href="/budget" asChild>
                         <ThemedButton
@@ -327,10 +409,11 @@ export function Dashboard() {
                             borderBottomWidth={
                                 recentBudgets.length - 1 === index ? 0 : 1
                             }
+                            rounded="xl"
                             borderColor="muted"
                             key={item.id}
                         >
-                            <ThemedView bgColor="inverted" rounded="full" p={2}>
+                            <ThemedView bgColor="inverted" rounded="md" p={2}>
                                 <Icon
                                     name="wallet-outline"
                                     size={20}
