@@ -81,13 +81,9 @@ export default function AppLayout() {
                 name="dashboard"
                 options={{
                     headerTitle: () => "",
-                    tabBarIcon: ({ color, focused, size }) => (
-                        <MaterialCommunityIcons
-                            name={
-                                focused
-                                    ? "view-dashboard"
-                                    : "view-dashboard-outline"
-                            }
+                    tabBarIcon: ({ focused, size }) => (
+                        <Icon
+                            name={focused ? "grid" : "grid-outline"}
                             size={size}
                             color="primary"
                         />
@@ -100,7 +96,7 @@ export default function AppLayout() {
                 name="budget"
                 options={{
                     headerTitle: () => "",
-                    tabBarIcon: ({ color, focused, size }) => (
+                    tabBarIcon: ({ focused, size }) => (
                         <Icon
                             name={focused ? "wallet" : "wallet-outline"}
                             size={size}
