@@ -47,6 +47,12 @@ export default function CreateLayout() {
                     headerTitle: "Create Budget",
                 }}
             />
+            <Stack.Screen
+                name="personal-information"
+                options={{
+                    headerTitle: "Personal Information",
+                }}
+            />
         </Stack>
     );
 }

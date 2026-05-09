@@ -31,7 +31,7 @@ export default function AppLayout() {
                     </HeaderButton>
                 ),
                 headerRight: () => (
-                    <HeaderButton onPress={logout} size="icon">
+                    <HeaderButton href="/(app)/profile" size="icon">
                         <Icon name="person-circle-outline" size={35} />
                     </HeaderButton>
                 ),
@@ -47,6 +47,7 @@ export default function AppLayout() {
                     shadowOffset: { width: 0, height: 3 },
                     shadowOpacity: 0.3,
                     shadowRadius: 5,
+                    minHeight: 90,
                 },
                 tabBarButton: HapticTab,
                 tabBarBackground: () => (
@@ -88,7 +89,7 @@ export default function AppLayout() {
                                     : "view-dashboard-outline"
                             }
                             size={size}
-                            color={color}
+                            color="primary"
                         />
                     ),
                     title: "Dashboard",
@@ -126,20 +127,18 @@ export default function AppLayout() {
                 }}
             />
             <Tabs.Screen
-                name="analytics"
+                name="profile"
                 options={{
                     headerTitle: () => "",
                     tabBarIcon: ({ focused, size }) => (
                         <Icon
-                            name={
-                                focused ? "stats-chart" : "stats-chart-outline"
-                            }
+                            name={focused ? "person-sharp" : "person-outline"}
                             size={size}
                             color="primary"
                         />
                     ),
-                    title: "Analytics",
-                    tabBarLabel: "Analytics",
+                    title: "Profile",
+                    tabBarLabel: "Profile",
                 }}
             />
         </Tabs>
