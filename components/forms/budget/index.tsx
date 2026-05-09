@@ -197,8 +197,12 @@ export function BudgetForm() {
     };
 
     const addAllocation = submitDraft((draft) => {
+        const filteredAllocations = allocations.filter(
+            (allocation) => allocation.category !== draft.category,
+        );
+
         setAllocation([
-            ...allocations,
+            ...filteredAllocations,
             {
                 ...draft,
             },
@@ -236,210 +240,212 @@ export function BudgetForm() {
                 bounces={false}
                 bottomOffset={62}
             > */}
-            <ThemedView
-                shadow="base"
-                rounded="xl"
-                borderWidth={1}
-                borderColor="muted"
-                bgColor="default"
-                p={4}
-                gap={4}
-            >
-                <SubheaderText>Budget Fundamentals</SubheaderText>
-                <ThemedView gap={1}>
-                    <ThemedTextInput
-                        hideLabel
-                        label="Budget name"
-                        placeholder="Enter budget name"
-                        value={name}
-                        onChangeText={setName}
-                        onBlur={onNameBlur}
-                        error={errors.name?.message}
-                    />
-                    <ThemedDropdown
-                        data={CurrencyLabels}
-                        value={currency}
-                        onChange={setCurrency}
-                        onBlur={onCurrencyBlur}
-                        error={errors.currency?.message}
-                        label="Currency"
-                        placeholder="Select currency"
-                        hideLabel
-                    />
-                    <DateInputWithPicker
-                        showPicker={showDatePicker.start}
-                        date={startDate}
-                        inputRef={startDateRef}
-                        onBlur={onStartDateBlur}
-                        onClosePicker={handleCloseStartDatePicker}
-                        onDateChange={handleStartDateChange}
-                        onShowPicker={handleShowStartDatePicker}
-                        placeholder="Select start date"
-                        label="Start Date"
-                        error={errors.startDate?.message}
-                        minimumDate={START_OF_CURRENT_MONTH}
-                    />
-                    <DateInputWithPicker
-                        showPicker={showDatePicker.end}
-                        date={endDate}
-                        inputRef={endDateRef}
-                        onBlur={onEndDateBlur}
-                        onClosePicker={handleCloseEndDatePicker}
-                        onDateChange={handleEndDateChange}
-                        onShowPicker={handleShowEndDatePicker}
-                        placeholder="Select end date"
-                        label="End Date"
-                        error={errors.endDate?.message}
-                        minimumDate={START_OF_CURRENT_MONTH}
-                    />
-                </ThemedView>
-            </ThemedView>
-            <ThemedView
-                gap={4}
-                shadow="base"
-                rounded="xl"
-                borderWidth={1}
-                borderColor="muted"
-                bgColor="default"
-                p={4}
-            >
-                <SubheaderText>Categories</SubheaderText>
-                <ThemedView>
-                    <ThemedDropdown
-                        data={CategoryLabels}
-                        value={category}
-                        onChange={setCategory}
-                        onBlur={onCategoryBlur}
-                        label="Category Name"
-                        placeholder="Enter category name"
-                        error={allocationError.category?.message}
-                        hideLabel
-                    />
-                    <ThemedView
-                        flexDirection="row"
-                        gap={4}
-                        width="100%"
-                        alignItems="flex-start"
-                    >
+                <ThemedView
+                    shadow="raised"
+                    rounded="xl"
+                    borderWidth={1}
+                    borderColor="muted"
+                    bgColor="default"
+                    p={4}
+                    gap={4}
+                >
+                    <SubheaderText>Budget Fundamentals</SubheaderText>
+                    <ThemedView gap={1}>
                         <ThemedTextInput
                             hideLabel
-                            label="Amount"
-                            placeholder="Enter amount"
-                            containerProps={{
-                                style: { flexShrink: 1, width: "80%" },
-                            }}
-                            inputMode="decimal"
-                            value={amount}
-                            onChangeText={setAmount}
-                            onBlur={onAmountBlur}
-                            error={
-                                allocationError.amount?.message ||
-                                errors.allocations?.message
-                            }
+                            label="Budget name"
+                            placeholder="Enter budget name"
+                            value={name}
+                            onChangeText={setName}
+                            onBlur={onNameBlur}
+                            error={errors.name?.message}
                         />
-                        <ThemedButton
-                            leftIcon={
-                                <Icon
-                                    name="add"
-                                    size={24}
-                                    color="invertedText"
-                                />
-                            }
-                            size="sm"
-                            variant="solid"
-                            colorScheme="primary"
-                            onPress={addAllocation}
-                        >
-                            Add
-                        </ThemedButton>
+                        <ThemedDropdown
+                            data={CurrencyLabels}
+                            value={currency}
+                            onChange={setCurrency}
+                            onBlur={onCurrencyBlur}
+                            error={errors.currency?.message}
+                            label="Currency"
+                            placeholder="Select currency"
+                            hideLabel
+                        />
+                        <DateInputWithPicker
+                            showPicker={showDatePicker.start}
+                            date={startDate}
+                            inputRef={startDateRef}
+                            onBlur={onStartDateBlur}
+                            onClosePicker={handleCloseStartDatePicker}
+                            onDateChange={handleStartDateChange}
+                            onShowPicker={handleShowStartDatePicker}
+                            placeholder="Select start date"
+                            label="Start Date"
+                            error={errors.startDate?.message}
+                            minimumDate={START_OF_CURRENT_MONTH}
+                        />
+                        <DateInputWithPicker
+                            showPicker={showDatePicker.end}
+                            date={endDate}
+                            inputRef={endDateRef}
+                            onBlur={onEndDateBlur}
+                            onClosePicker={handleCloseEndDatePicker}
+                            onDateChange={handleEndDateChange}
+                            onShowPicker={handleShowEndDatePicker}
+                            placeholder="Select end date"
+                            label="End Date"
+                            error={errors.endDate?.message}
+                            minimumDate={START_OF_CURRENT_MONTH}
+                        />
                     </ThemedView>
-                    {allocations.length > 0 && (
-                        <>
-                            <FlatList
-                                data={allocations}
-                                keyExtractor={(_, index) => index.toString()}
-                                renderItem={({ item, index }) => (
-                                    <ThemedView
-                                        {...mixins.row}
-                                        justifyContent="space-between"
-                                        pi={1}
-                                        pb={2}
-                                    >
-                                        <ThemedView {...mixins.row} gap={4}>
-                                            <ThemedView
-                                                bgColor="inverted"
-                                                rounded="full"
-                                                p={2}
+                </ThemedView>
+                <ThemedView
+                    gap={4}
+                    shadow="raised"
+                    rounded="xl"
+                    borderWidth={1}
+                    borderColor="muted"
+                    bgColor="default"
+                    p={4}
+                >
+                    <SubheaderText>Categories</SubheaderText>
+                    <ThemedView>
+                        <ThemedDropdown
+                            data={CategoryLabels}
+                            value={category}
+                            onChange={setCategory}
+                            onBlur={onCategoryBlur}
+                            label="Category Name"
+                            placeholder="Enter category name"
+                            error={allocationError.category?.message}
+                            hideLabel
+                        />
+                        <ThemedView
+                            flexDirection="row"
+                            gap={4}
+                            width="100%"
+                            alignItems="flex-start"
+                        >
+                            <ThemedTextInput
+                                hideLabel
+                                label="Amount"
+                                placeholder="Enter amount"
+                                containerProps={{
+                                    style: { flexShrink: 1, width: "80%" },
+                                }}
+                                inputMode="decimal"
+                                value={amount}
+                                onChangeText={setAmount}
+                                onBlur={onAmountBlur}
+                                error={
+                                    allocationError.amount?.message ||
+                                    errors.allocations?.message
+                                }
+                            />
+                            <ThemedButton
+                                leftIcon={
+                                    <Icon
+                                        name="add"
+                                        size={24}
+                                        color="invertedText"
+                                    />
+                                }
+                                size="sm"
+                                variant="solid"
+                                colorScheme="primary"
+                                onPress={addAllocation}
+                            >
+                                Add
+                            </ThemedButton>
+                        </ThemedView>
+                        {allocations.length > 0 && (
+                            <>
+                                <FlatList
+                                    data={allocations}
+                                    keyExtractor={(_, index) =>
+                                        index.toString()
+                                    }
+                                    renderItem={({ item, index }) => (
+                                        <ThemedView
+                                            {...mixins.row}
+                                            justifyContent="space-between"
+                                            pi={1}
+                                            pb={2}
+                                        >
+                                            <ThemedView {...mixins.row} gap={4}>
+                                                <ThemedView
+                                                    bgColor="inverted"
+                                                    rounded="full"
+                                                    p={2}
+                                                >
+                                                    <Icon
+                                                        name={
+                                                            categoryIcons[
+                                                                item.category
+                                                            ]
+                                                        }
+                                                        size={20}
+                                                        color="invertedText"
+                                                    />
+                                                </ThemedView>
+                                                <ThemedView>
+                                                    <LabelText weight="bold">
+                                                        {item.category.toLowerCase()}
+                                                    </LabelText>
+                                                    <CaptionText>
+                                                        {formatMoney(
+                                                            item.amount,
+                                                            currency,
+                                                        )}
+                                                    </CaptionText>
+                                                </ThemedView>
+                                            </ThemedView>
+                                            <ThemedButton
+                                                size="icon"
+                                                variant="text"
+                                                onPress={() =>
+                                                    removeAllocation(index)
+                                                }
                                             >
                                                 <Icon
-                                                    name={
-                                                        categoryIcons[
-                                                            item.category
-                                                        ]
-                                                    }
-                                                    size={20}
-                                                    color="invertedText"
+                                                    name="close-outline"
+                                                    size={24}
+                                                    color="critical"
                                                 />
-                                            </ThemedView>
-                                            <ThemedView>
-                                                <LabelText weight="bold">
-                                                    {item.category.toLowerCase()}
-                                                </LabelText>
-                                                <CaptionText>
-                                                    {formatMoney(
-                                                        item.amount,
-                                                        currency,
-                                                    )}
-                                                </CaptionText>
-                                            </ThemedView>
+                                            </ThemedButton>
                                         </ThemedView>
-                                        <ThemedButton
-                                            size="icon"
-                                            variant="text"
-                                            onPress={() =>
-                                                removeAllocation(index)
-                                            }
-                                        >
-                                            <Icon
-                                                name="close-outline"
-                                                size={24}
-                                                color="critical"
-                                            />
-                                        </ThemedButton>
-                                    </ThemedView>
-                                )}
-                            />
-                            <ThemedView
-                                borderTopWidth={1}
-                                borderColor="subtle"
-                                pi={1}
-                                mbs={2}
-                                pbs={3}
-                                {...mixins.row}
-                                justifyContent="space-between"
-                            >
-                                <SubheaderText>Total Budget</SubheaderText>
-                                <LabelText>
-                                    {formatMoney(totalBudget, currency)}
-                                </LabelText>
-                            </ThemedView>
-                        </>
-                    )}
+                                    )}
+                                />
+                                <ThemedView
+                                    borderTopWidth={1}
+                                    borderColor="subtle"
+                                    pi={1}
+                                    mbs={2}
+                                    pbs={3}
+                                    {...mixins.row}
+                                    justifyContent="space-between"
+                                >
+                                    <SubheaderText>Total Budget</SubheaderText>
+                                    <LabelText>
+                                        {formatMoney(totalBudget, currency)}
+                                    </LabelText>
+                                </ThemedView>
+                            </>
+                        )}
+                    </ThemedView>
                 </ThemedView>
-            </ThemedView>
-            {/* a list to display budget allocations */}
-            {/* <FlatList> */}
-            {/* render budget allocations here */}
-            {/* </FlatList> */}
-            <ThemedButton
-                // interactiveState={isDirty ? "disabled" : "pressed"}
-                isLoading={isSubmitting}
-                onPress={onSubmit}
-            >
-                {isSubmitting ? "Submitting" : "Create Budget"}
-            </ThemedButton>
-            {/* </KeyboardAwareScrollView> */}
-            {/* <KeyboardToolbar /> */}
+                {/* a list to display budget allocations */}
+                {/* <FlatList> */}
+                {/* render budget allocations here */}
+                {/* </FlatList> */}
+                <ThemedButton
+                    // interactiveState={isDirty ? "disabled" : "pressed"}
+                    isLoading={isSubmitting}
+                    onPress={onSubmit}
+                >
+                    {isSubmitting ? "Submitting" : "Create Budget"}
+                </ThemedButton>
+            {/* </KeyboardAwareScrollView>
+            <KeyboardToolbar /> */}
         </>
     );
 }

@@ -13,7 +13,7 @@ import { Spacing } from "@/lib/spacing/spacing";
 import { useNavigation, useLocalSearchParams } from "expo-router";
 import { useLayoutEffect } from "react";
 import { useThemeColor } from "@/lib/theme/use-theme-color";
-import { formatMoney, formatPercentage } from "@/lib/utils/formatter";
+import { formatDate, formatMoney, formatPercentage } from "@/lib/utils/formatter";
 import { useBudget } from "@/hooks/useBudget";
 import { ActivityIndicator } from "react-native";
 import { categoryIcons } from "@/components/forms/budget/types";
@@ -34,7 +34,7 @@ export function BudgetDetail() {
                 color: textColor,
             },
         });
-    }, [navigation]);
+    }, [navigation, budget?.name]);
 
     if (!budget) {
         return (
@@ -72,11 +72,11 @@ export function BudgetDetail() {
                         borderWidth={1}
                         rounded="xl"
                         p={6}
-                        shadow="sm"
+                        shadow="raised"
                         borderColor="subtle"
                         bgColor="inverted"
                     >
-                        <ThemedView {...mixins.between}>
+                        <ThemedView {...mixins.between} bgColor="transparent">
                             <SubheaderText
                                 size="sm"
                                 transform="capitalize"
@@ -90,6 +90,7 @@ export function BudgetDetail() {
                             flexDirection="row"
                             alignItems="flex-end"
                             gap={1}
+                            bgColor="transparent"
                         >
                             <LabelText size="2xl" color="inverted">
                                 {formatMoney(budget.amountSpent)} /{" "}
@@ -99,7 +100,7 @@ export function BudgetDetail() {
                             </LabelText>
                         </ThemedView>
 
-                        <ThemedView gap={1}>
+                        <ThemedView gap={1} bgColor="transparent">
                             <ProgressBar
                                 current={budget.amountSpent}
                                 total={budget.totalAmount}
@@ -163,7 +164,7 @@ export function BudgetDetail() {
             )}
             ListFooterComponent={() => (
                 <FlatList
-                    data={budget.allocations}
+                    data={budget.expenses}
                     bounces={false}
                     keyExtractor={({ id }) => id}
                     style={{ marginTop: Spacing[8] }}
@@ -178,50 +179,42 @@ export function BudgetDetail() {
                         <ThemedView height={Spacing[4]} />
                     )}
                     renderItem={({ item }) => (
-                        <ThemedView
-                            gap={1.5}
-                            borderWidth={1}
-                            rounded="lg"
-                            p={4}
-                            borderColor="subtle"
-                        >
-                            <ThemedView
-                                {...mixins.row}
-                                gap={3}
-                                borderColor="muted"
-                                key={item.id}
-                            >
-                                <ThemedView
-                                    bgColor="inverted"
-                                    rounded="sm"
-                                    p={2}
-                                >
-                                    <Icon name="receipt-outline" size={20} />
-                                </ThemedView>
-                                <ThemedView flex={1}>
-                                    <BodyText size="sm" numberOfLines={1}>
-                                        {item.category}
-                                    </BodyText>
-                                    <CaptionText
-                                        size="xs"
-                                        color="subtle"
-                                        numberOfLines={1}
-                                    >
-                                        {getPercentage(item.usedPercentage)}{" "}
-                                        used
-                                    </CaptionText>
-                                </ThemedView>
-
-                                <CaptionText size="xs" color="default">
-                                    {formatMoney(item.amountSpent)} /{" "}
-                                    {formatMoney(item.allocatedAmount)}
-                                </CaptionText>
+                        <ThemedView {...mixins.row} pb={4} gap={3}>
+                            <ThemedView bgColor="inverted" rounded="full" p={2}>
+                                <Icon
+                                    name="receipt-outline"
+                                    size={20}
+                                    color="invertedText"
+                                />
                             </ThemedView>
-                            <ProgressBar
-                                current={item.amountSpent}
-                                total={item.allocatedAmount}
-                                color="successBorder"
-                            />
+                            <ThemedView flex={1}>
+                                <BodyText size="sm">{item.name}</BodyText>
+                                <ThemedView
+                                    {...mixins.row}
+                                    gap={1}
+                                    flexWrap="wrap"
+                                >
+                                    <CaptionText color="muted" size="xs">
+                                        {formatDate(item.date)}
+                                    </CaptionText>
+                                    <CaptionText color="muted" size="xs">
+                                        •
+                                    </CaptionText>
+                                    <ThemedView
+                                        bgColor="subtle"
+                                        rounded="full"
+                                        pi={2.5}
+                                        pb={0.5}
+                                    >
+                                        <CaptionText color="primary" size="xs">
+                                            {item.category}
+                                        </CaptionText>
+                                    </ThemedView>
+                                </ThemedView>
+                            </ThemedView>
+                            <BodyText color="critical">
+                                -{formatMoney(item.amount, item.currency)}
+                            </BodyText>
                         </ThemedView>
                     )}
                 />

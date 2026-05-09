@@ -3,7 +3,6 @@ import {
     BodyText,
     CaptionText,
     HeadingText,
-    LabelText,
     SubheaderText,
 } from "@/components/themed/Text";
 import { ThemedView } from "@/components/themed/View";
@@ -14,7 +13,6 @@ import { Link } from "expo-router";
 import { Alert, FlatList } from "react-native";
 import { ProgressBar } from "@/components/themed/ProgressBar";
 import { BottomTabBarHeight } from "@/constants";
-import { mockBudgets } from "./data";
 import { formatMoney } from "@/lib/utils/formatter";
 import { useBudgets } from "@/hooks/useBudget";
 import { Spinner } from "@/components/ui/Spinner";
