@@ -55,14 +55,6 @@ export function Profile() {
         );
     }
 
-    if (!profile) {
-        return (
-            <ThemedView flex={1} justifyContent="center" alignItems="center">
-                <CaptionText color="muted">Profile not found</CaptionText>
-            </ThemedView>
-        );
-    }
-
     return (
         <ThemedView mb={2} pi={6} gap={8}>
             <ThemedView gap={6}>
@@ -154,7 +146,7 @@ export function Profile() {
                                 member since
                             </LabelText>
                             <BodyText size="base" weight="medium">
-                                {formatDate(profile.createdAt, "medium")}
+                                { profile && formatDate(profile?.createdAt, "medium")}
                             </BodyText>
                         </ThemedView>
                     </ThemedView>
